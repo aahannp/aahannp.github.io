@@ -1,9 +1,531 @@
 <!doctype html>
+<html lang="en">
+<head>
 <meta charset="utf-8">
-<title>Relay</title>
-<link rel="canonical" href="https://aahannp.github.io/relay/">
-<meta http-equiv="refresh" content="0; url=https://aahannp.github.io/relay/">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aahan Piplani · Backend engineer</title>
+<meta name="description" content="Aahan Piplani is a backend engineer working on identity, auth and distributed systems: workload identity, audit pipelines, bounded worker pools, and trading infrastructure. Every project here has a small live demo.">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#000000">
+<!-- TODO(aahan): these URLs assume the user site https://aahannp.github.io/. Change all four if you publish somewhere else. -->
+<link rel="canonical" href="https://aahannp.github.io/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://aahannp.github.io/">
+<meta property="og:title" content="Aahan Piplani · Backend engineer">
+<meta property="og:description" content="Identity, auth and distributed systems. How I think about failure, trade-offs and rollouts, with a live demo for every project.">
+<meta property="og:image" content="https://aahannp.github.io/assets/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://aahannp.github.io/assets/og.jpg">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
 <script>
-  location.replace('https://aahannp.github.io/relay/' + location.pathname.replace(/^\/(agent-desk\/?)?/, '') + location.search + location.hash);
+  // Before first paint: saved theme, and flags that turn on motion and JS-only states (content is never hidden without JS).
+  try { const t = localStorage.getItem('theme'); if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t; } catch {}
+  document.documentElement.classList.add('js');
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('motion');
 </script>
-<p>Relay (formerly Agent Desk) lives at <a href="https://aahannp.github.io/relay/">aahannp.github.io/relay</a>.</p>
+<link rel="stylesheet" href="style.css">
+<script src="main.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#top"><img src="assets/icon.svg" alt="" width="24" height="24"><span>Aahan Piplani</span></a>
+    <nav class="nav-links" aria-label="Sections">
+      <a href="#meesho">Meesho</a>
+      <a href="#goquant">GoQuant</a>
+      <a href="#projects">Projects</a>
+      <a href="#principles">How I think</a>
+      <a href="#skills">Skills</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <button class="icon-btn" id="themeToggle" type="button" aria-label="Switch to light mode">
+      <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+    </button>
+    <button class="icon-btn menu-btn" type="button" popovertarget="menu" aria-label="Sections menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+  <div class="progress" aria-hidden="true"><i></i></div>
+</header>
+<nav id="menu" popover aria-label="Sections menu">
+  <a href="#meesho">Meesho</a><a href="#goquant">GoQuant</a><a href="#projects">Projects</a><a href="#principles">How I think</a><a href="#skills">Skills and education</a><a href="#contact">Contact</a>
+</nav>
+
+<main id="main">
+  <section class="hero" id="top" aria-labelledby="name">
+    <div class="hero-glow" aria-hidden="true"></div>
+    <div class="hero-grid" aria-hidden="true"></div>
+    <div class="wrap hero-in">
+      <p class="eyebrow" style="--i:0"><span class="dot" aria-hidden="true"></span>Backend engineer · SDE-1 at Meesho</p>
+      <h1 id="name" style="--i:1">Aahan Piplani</h1>
+      <p class="sub" style="--i:2">I build <b>identity, auth and distributed systems</b>: how a service proves who it is, what it may call, and what happens when a dependency is slow, wrong or gone.</p>
+      <div class="ctas" style="--i:3">
+        <a class="pill" href="#meesho">See how I work</a>
+        <a class="more" href="mailto:aahanpiplani@gmail.com">Email me</a>
+      </div>
+      <ul class="social" style="--i:4" aria-label="Elsewhere">
+        <li><a href="https://github.com/aahannp"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.68-1.28-1.68-1.05-.71.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.56-.29-5.25-1.28-5.25-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.7 5.4-5.27 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z"/></svg>GitHub</a></li>
+        <li><a href="https://www.linkedin.com/in/aahan-piplani-12a19b210/"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>LinkedIn</a></li>
+        <li><a href="mailto:aahanpiplani@gmail.com"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>aahanpiplani@gmail.com</a></li>
+      </ul>
+    </div>
+    <div class="wrap">
+      <ul class="stats" aria-label="At a glance">
+        <li class="rise"><strong>3</strong><span>exchanges wired into one trading product: Binance, Deribit and Hyperliquid.</span><em>GoQuant · GoTrade</em></li>
+        <li class="rise"><strong>−40%</strong><span>server load after rebuilding a module around demand instead of always-on processes.</span><em>GoQuant · GoOps</em></li>
+        <li class="rise"><strong>&lt;400<small style="font-size:.45em;letter-spacing:0"> ms</small></strong><span>real-time query response for a RAG pipeline, down from 1.2 seconds.</span><em>GoQuant · GoOracle</em></li>
+        <li class="rise"><strong>16</strong><span>coding agents side by side as real terminals, in an app I built and open-sourced.</span><em>Relay</em></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="thesis" id="thesis" aria-label="What I care about">
+    <div class="pin">
+      <div class="wrap">
+        <p class="words" data-words>Most of what I build is invisible when it works. Services prove who they are before they talk. Tokens live for minutes, not months. Queues say no early instead of failing late. Every sensitive change leaves a record. And there is always a safe way to turn it off.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ MEESHO ============ -->
+  <section id="meesho" class="center">
+    <div class="wrap">
+      <p class="chap reveal"><span>01</span>Meesho · Bengaluru</p>
+      <h2 class="reveal">Identity, auth, and the plumbing around them.</h2>
+      <p class="lede reveal">I joined as an SDE intern in March 2026 and became SDE-1 in September. I work on the <b>identity and auth services</b>: the parts every other team depends on and nobody should have to think about.</p>
+      <ol class="timeline">
+        <li class="rise"><time>03/2026 – 08/2026</time><b>SDE intern</b><span>Built the audit pipeline in the identity service, and a lazy password-hash migration on a bounded worker pool.</span></li>
+        <li class="rise"><time>09/2026 – now</time><b>SDE-1</b><span>Building service-to-service workload identity with the identity team: key compromise handling, the Kubernetes token verifier, policy-bundle delivery and the staging rollout. Next up: developer-to-service auth.</span></li>
+      </ol>
+      <p class="note reveal">This is a public page, so names are generic on purpose: no internal services, hosts, config or numbers.</p>
+    </div>
+  </section>
+
+  <section id="s2s" class="story" aria-labelledby="s2s-title">
+    <div class="wide">
+      <header class="story-head">
+        <span class="kicker reveal">Service-to-service workload identity · SDE-1</span>
+        <h3 id="s2s-title" class="h3xl reveal">Shared secrets out. Tokens that expire in minutes in.</h3>
+        <p class="lede left reveal">I worked on the S2S workload identity platform: the <b>identity service</b> that mints and signs tokens, the <b>auth service</b> exchange, a shared library for callers and receivers, and a reviewed repo of who may call whom. My parts: key compromise and revocation, the Kubernetes token verifier, bundle delivery to receivers, audit events and the staging rollout. It runs on staging with an end-to-end call passing. Scroll through the flow, or drive the demo yourself.</p>
+      </header>
+      <div class="story-grid">
+        <ol class="steps" aria-label="How a service call gets authenticated">
+          <li class="step" data-stage="prove"><span class="n">Step 1 · Prove</span><h4>The workload shows its papers.</h4><p>It presents a <b>Kubernetes projected service-account token</b>: issued by the cluster, bound to the pod, never copied into a config file.</p></li>
+          <li class="step" data-stage="mint"><span class="n">Step 2 · Exchange</span><h4>Swap proof for a short-lived token.</h4><p>The auth service verifies that proof and the identity service mints a token that lives for minutes. Signing keys are <b>KMS-wrapped and rotate automatically</b>.</p></li>
+          <li class="step" data-stage="call"><span class="n">Step 3 · Call</span><h4>Nothing long-lived on the wire.</h4><p>The caller sends the token with its request. If it leaks, it expires before it's worth much.</p></li>
+          <li class="step" data-stage="verify"><span class="n">Step 4 · Verify</span><h4>Check the signature, not a shared secret.</h4><p>The receiver checks signature, expiry and audience against the identity service's <b>published key set (JWKS)</b>. Revoke a key and it leaves the set, so its tokens stop working everywhere.</p></li>
+          <li class="step" data-stage="decide"><span class="n">Step 5 · Decide</span><h4>Policy as code, fail closed.</h4><p>Grants live in a reviewed repo with CI validation. Receivers pull them as <b>signed policy bundles</b>, cache them, and keep the last good copy. If they can't verify, the answer is no.</p></li>
+          <li class="step" data-stage="rollout"><span class="n">Step 6 · Roll out</span><h4>Shadow first. Kill switch always.</h4><p>Receivers start in <b>shadow mode</b>: evaluate policy, log what would have been denied, let the call through. Enforce comes once the would-deny count is flat. A central <b>kill switch</b> pushes receivers back to shadow from config, no redeploy, and a typo in the mode falls back to shadow, never to off or enforce. Identity checks never switch off.</p></li>
+        </ol>
+        <div class="stage-col">
+          <div class="desk s2s rise" id="s2s-demo" role="group" aria-labelledby="s2s-label">
+            <div class="bar"><span id="s2s-label">Live demo · S2S token exchange</span><span class="tag">illustrative</span></div>
+            <svg class="flow" viewBox="0 0 560 300" role="img" aria-label="Diagram: the billing workload proves its identity to the auth service, the identity service mints a token, billing calls ledger, and ledger verifies the token against the key set and the policy bundle.">
+              <path class="ed" id="e-prove" d="M144 136 C 182 136, 178 48, 216 48"/>
+              <path class="ed" id="e-mint" d="M344 48 H 416"/>
+              <path class="ed" id="e-call" d="M144 166 C 300 166, 290 234, 416 234"/>
+              <path class="ed dash" id="e-jwks" d="M480 80 V 220"/>
+              <path class="ed dash" id="e-pol" d="M344 268 H 416"/>
+              <text class="el" id="l-prove" x="168" y="86">SA token</text>
+              <text class="el" id="l-mint" x="380" y="40">mint</text>
+              <text class="el" id="l-call" x="285" y="190">S2S token</text>
+              <text class="el" id="l-jwks" x="508" y="154">JWKS</text>
+              <text class="el" id="l-pol" x="380" y="260">grants</text>
+              <g class="nd" id="n-caller"><rect x="16" y="118" width="128" height="64" rx="12"/><text x="80" y="146" id="caller-name">billing</text><text class="sub" x="80" y="163">caller workload</text></g>
+              <g class="nd" id="n-auth"><rect x="216" y="16" width="128" height="64" rx="12"/><text x="280" y="44">Auth service</text><text class="sub" x="280" y="61">verifies proof</text></g>
+              <g class="nd" id="n-ident"><rect x="416" y="16" width="128" height="64" rx="12"/><text x="480" y="44">Identity service</text><text class="sub" x="480" y="61">mints · signs · JWKS</text></g>
+              <g class="nd" id="n-pol"><rect x="216" y="236" width="128" height="56" rx="12"/><text x="280" y="260">Policy bundle</text><text class="sub" x="280" y="277">signed · last good</text></g>
+              <g class="nd" id="n-recv"><rect x="416" y="220" width="128" height="72" rx="12"/><text x="480" y="250">ledger</text><text class="sub" x="480" y="267" id="recv-mode">receiver · shadow</text></g>
+              <circle class="pkt" r="6" cx="0" cy="0"/>
+            </svg>
+            <div class="s2s-mid">
+              <div class="card"><b>Token held by the caller</b><pre class="tok" id="tok"><span class="c">// none yet: send a request</span></pre></div>
+              <div class="card"><b>Published key set</b><ul class="keys" id="keys"></ul></div>
+            </div>
+            <div class="s2s-ctl">
+              <div class="ctl"><b>Receiver mode</b>
+                <fieldset class="seg"><legend>Receiver mode</legend>
+                  <label><input type="radio" name="s2s-mode" value="shadow" checked><span>Shadow</span></label>
+                  <label><input type="radio" name="s2s-mode" value="enforce"><span>Enforce</span></label>
+                </fieldset>
+              </div>
+              <div class="ctl"><b>Caller</b>
+                <fieldset class="seg"><legend>Caller</legend>
+                  <label><input type="radio" name="s2s-caller" value="billing" checked><span>billing <small>granted</small></span></label>
+                  <label><input type="radio" name="s2s-caller" value="reports"><span>reports <small>no grant</small></span></label>
+                </fieldset>
+              </div>
+              <label class="switch danger"><input type="checkbox" role="switch" id="s2s-kill"><i aria-hidden="true"></i>Kill switch</label>
+              <div class="acts">
+                <button type="button" class="dbtn pri" id="s2s-send"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 0l9 5-9 5z" fill="currentColor"/></svg>Send request</button>
+                <button type="button" class="dbtn" id="s2s-rotate">Rotate key</button>
+                <button type="button" class="dbtn dan" id="s2s-revoke">Revoke key</button>
+              </div>
+            </div>
+            <p class="verdict" id="s2s-verdict" aria-live="polite"><b>—</b><span>Press <em>Send request</em>. Then switch the caller, try Enforce, flip the kill switch, or revoke the key.</span></p>
+            <ol class="dlog" id="s2s-log" aria-label="Decision log"></ol>
+          </div>
+        </div>
+      </div>
+      <ul class="recap">
+        <li class="rise"><b>Rotate is not revoke.</b>Rotation keeps the old key published until its tokens expire, so nothing breaks. Revocation pulls it now and accepts the breakage, because that's the point.</li>
+        <li class="rise"><b>Fail closed, but not fragile.</b>No valid token or policy means no access. Caching the last good signed bundle keeps a control-plane blip from becoming an outage.</li>
+        <li class="rise"><b>Relax policy, never identity.</b>Shadow mode and the kill switch soften authorization only. A bad signature or a revoked key is rejected in every mode. And onboarding is one grants file: the library is zero-config.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="audit" class="alt" aria-labelledby="audit-title">
+    <div class="wide row2">
+      <div class="copy">
+        <span class="kicker reveal">Audit pipeline · Intern</span>
+        <h3 id="audit-title" class="h3xl reveal">Every token mint leaves a record. None of them slow a login.</h3>
+        <p class="reveal">I built the audit mechanism in the identity service from scratch: an <b>async event pipeline</b> that records user deletions, workload principals, bindings, key compromises and <b>every token mint</b>, with metrics and unit tests.</p>
+        <p class="reveal">Writes happen off the request path into a bounded buffer, so a slow or unavailable audit store never adds latency to a login.</p>
+        <div class="trade reveal"><b>The trade-off</b><p>Async keeps a slow audit store from becoming a slow login. The price: an event still in memory can be lost if the process dies, so the buffer must be bounded and watched, never left to grow. Try "Slow audit store" in the demo.</p></div>
+      </div>
+      <div class="desk audit rise" id="audit-demo" role="group" aria-labelledby="audit-label">
+        <div class="bar"><span id="audit-label">identity service · audit events</span><span class="tag">illustrative</span></div>
+        <div class="afil">
+          <fieldset class="seg" id="audit-filter"><legend>Filter by event type</legend></fieldset>
+        </div>
+        <div class="pipe" aria-hidden="true"><span>request</span><i>→</i><span id="pipe-q">enqueue · non-blocking</span><i>→</i><span id="pipe-w">writer</span><i>→</i><span>store · TTL</span></div>
+        <ol class="events" id="audit-list" aria-label="Most recent audit events"></ol>
+        <div class="afoot">
+          <button type="button" class="dbtn" id="audit-pause" aria-pressed="false">Pause</button>
+          <label class="switch danger"><input type="checkbox" role="switch" id="audit-slow"><i aria-hidden="true"></i>Slow audit store</label>
+          <span class="meter">login p50 <b id="audit-lat">41 ms</b> · buffered <b id="audit-buf">0</b>/40 · dropped <b id="audit-drop">0</b></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="pool" aria-labelledby="pool-title">
+    <div class="wrap center">
+      <span class="kicker reveal">Password verification · Intern</span>
+      <h3 id="pool-title" class="h3xl reveal">A login spike shouldn't take the service down with it.</h3>
+      <p class="lede reveal">Password hashing is slow on purpose, which makes it the first thing to melt under load. Verification runs on a <b>bounded worker pool</b>: a fixed number of workers, a fixed-size queue, and an honest <b>HTTP 429</b> the moment the queue is full. Push the load past capacity and watch what each setting costs.</p>
+    </div>
+    <div class="wide">
+      <div class="desk pool rise" id="pool-demo" role="group" aria-labelledby="pool-label">
+        <div class="bar"><span id="pool-label">Live demo · bounded worker pool</span><span class="tag">simulated</span></div>
+        <div class="pool-grid">
+          <div class="pool-ctl">
+            <label class="rng"><span>Incoming load <output id="o-load">12 req/s</output></span><input type="range" id="p-load" min="2" max="60" step="1" value="12"></label>
+            <label class="rng"><span>Workers <output id="o-workers">4</output></span><input type="range" id="p-workers" min="1" max="12" step="1" value="4"></label>
+            <label class="rng"><span>Queue size <output id="o-queue">8</output></span><input type="range" id="p-queue" min="0" max="40" step="1" value="8"></label>
+            <label class="switch"><input type="checkbox" role="switch" id="p-skip" checked><i aria-hidden="true"></i>Skip work whose caller already gave up</label>
+            <div class="presets" role="group" aria-label="Scenarios">
+              <button type="button" class="dbtn" data-preset="calm">Normal day</button>
+              <button type="button" class="dbtn" data-preset="spike">Login spike</button>
+              <button type="button" class="dbtn" data-preset="deep">Spike + huge queue</button>
+              <button type="button" class="dbtn" id="p-pause" aria-pressed="false">Pause</button>
+            </div>
+            <p class="sample">Toy numbers: each hash takes ~200 ms of CPU and callers give up after 1.5 s. Capacity is workers ÷ 0.2 s.</p>
+          </div>
+          <div class="pool-viz">
+            <div class="lane"><b>Queue<small id="o-depth">0 / 8</small></b><div class="slots" id="p-slots"></div></div>
+            <div class="lane"><b>Workers<small id="o-cap">20 req/s max</small></b><div class="wks" id="p-wks"></div></div>
+            <div class="metrics">
+              <div class="metric" id="m-ok"><small>Served</small><b>0<u>/s</u></b></div>
+              <div class="metric" id="m-rej"><small>Rejected 429</small><b>0<u>/s</u></b></div>
+              <div class="metric" id="m-to"><small>Timed out</small><b>0<u>/s</u></b></div>
+              <div class="metric" id="m-p95"><small>p95 latency</small><b>0<u>ms</u></b></div>
+              <div class="metric" id="m-waste"><small>Wasted CPU</small><b>0<u>%</u></b></div>
+            </div>
+            <div>
+              <div class="chart" id="p-chart" aria-hidden="true"></div>
+              <div class="legend" aria-hidden="true"><span style="--c:var(--t-ok)">served</span><span style="--c:var(--t-warn)">429, rejected fast</span><span style="--c:var(--t-red)">caller timed out</span><span>last 10 s</span></div>
+            </div>
+            <p class="pool-say" id="p-say"></p>
+            <p class="sr-only" aria-live="polite" id="p-live"></p>
+          </div>
+        </div>
+      </div>
+      <div class="points">
+        <div class="rise"><b>Reject early, not late.</b><p>A 429 in a millisecond lets the client back off or retry elsewhere. A timeout after a long wait helps nobody and holds a connection the whole time.</p></div>
+        <div class="rise"><b>Don't do dead work.</b><p>If the caller has already given up, hashing their password burns CPU for an answer nobody will read. The worker checks first and skips it.</p></div>
+        <div class="rise"><b>Size the queue from the timeout.</b><p>Queue length × hash time ÷ workers has to stay under the caller's timeout. A bigger queue only hides overload until everything times out at once.</p></div>
+      </div>
+
+      <div class="row2 flip mig">
+        <div class="copy">
+          <span class="kicker reveal">Lazy hash migration</span>
+          <h3 class="h3xl reveal">Moving off bcrypt without a single reset email.</h3>
+          <p class="reveal">You can't rehash a password you don't have, and the only time it legitimately exists is during a successful login. So the upgrade rides on login: verify against the stored bcrypt hash, answer the user, then <b>rewrite the hash with Argon2id off the request path</b>.</p>
+          <p class="reveal">Users never notice, and the old hashes drain out on their own. I designed and built this path in the auth service, backed by 1,000+ lines of tests.</p>
+        </div>
+        <div class="desk migd rise" id="mig-demo" role="group" aria-label="Lazy migration demo">
+          <div class="rec"><span>Stored hash · asha</span><code id="mig-hash">$2b$12$Kq8vQ1x7s0eWl3hYb9rT1uO2cYk4mJ8dN6pA5fG7hR3tL0wZ</code><span class="algo" id="mig-algo" data-a="bcrypt">bcrypt</span></div>
+          <ol class="msteps" id="mig-steps">
+            <li class="path"><small>Request path</small>Verify password</li>
+            <li class="path"><small>Request path</small>Respond to user</li>
+            <li class="off"><small>Off the path</small>Rehash with Argon2id</li>
+            <li class="off"><small>Off the path</small>Store new hash</li>
+          </ol>
+          <div class="macts">
+            <button type="button" class="dbtn pri" id="mig-ok">Log in, right password</button>
+            <button type="button" class="dbtn" id="mig-bad">Log in, wrong password</button>
+            <button type="button" class="dbtn" id="mig-reset">Reset</button>
+          </div>
+          <p class="msay" id="mig-say" aria-live="polite">asha's account still has a bcrypt hash from before the migration.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="now" class="alt" aria-label="In progress">
+    <div class="wrap">
+      <div class="now rise">
+        <span class="live-dot">In progress</span>
+        <div>
+          <h3>Next: developer-to-service auth, and S2S for stateful services.</h3>
+          <p>Extending the same identity model to engineers calling services (D2S), and to stateful platforms like the message queue and database layers. Details once it ships.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ GOQUANT ============ -->
+  <section id="goquant" class="center">
+    <div class="wide">
+      <p class="chap reveal"><span>02</span>GoQuant · Remote · 02/2025 – present</p>
+      <h2 class="reveal">Trading infrastructure, measured in milliseconds.</h2>
+      <p class="lede reveal">As a C++/Python software engineer intern I've worked across risk, ops, AI search and trading: building pages from scratch, re-architecting what was slow, and wiring in exchanges.</p>
+      <div class="tiles">
+        <article class="tile full rise">
+          <div class="left">
+            <span class="kicker">GoOps and GoOracle</span>
+            <h3>Faster by doing less, on demand.</h3>
+            <p>I refactored <b>GoOps</b> from multiprocessing to a <b>demand-driven architecture</b>: work starts when there's work, instead of processes running whether or not anything needs them. Server load fell 40% and latency 30%.</p>
+            <p>For <b>GoOracle</b> I'm building the RAG pipeline; real-time query response went from 1.2 s to under 400 ms.</p>
+          </div>
+          <div class="desk ba" id="ba" data-m="after" role="group" aria-label="Before and after comparison">
+            <div class="top">
+              <span class="tag">relative bars · resume figures</span>
+              <fieldset class="seg"><legend>Show</legend>
+                <label><input type="radio" name="ba" value="before"><span>Before</span></label>
+                <label><input type="radio" name="ba" value="after" checked><span>After</span></label>
+              </fieldset>
+            </div>
+            <div class="barrow"><span>GoOracle query response <b data-b="1.2 s" data-a="&lt; 400 ms">&lt; 400 ms</b></span><div class="track"><i style="--b:1;--a:.33"></i></div></div>
+            <div class="barrow"><span>GoOps server load <b data-b="baseline" data-a="−40%">−40%</b></span><div class="track"><i style="--b:1;--a:.6"></i></div></div>
+            <div class="barrow"><span>GoOps latency <b data-b="baseline" data-a="−30%">−30%</b></span><div class="track"><i style="--b:1;--a:.7"></i></div></div>
+          </div>
+        </article>
+
+        <article class="tile left rise">
+          <span class="kicker">GoTrade</span>
+          <h3>Three exchanges, one way to trade.</h3>
+          <p>I integrated <b>Binance, Deribit and Hyperliquid</b> into GoTrade for 50+ active users. Each venue has its own idea of a symbol, a signature and an order; the product shouldn't care.</p>
+          <div class="pic">
+            <div class="desk router" id="router" role="group" aria-label="Exchange routing demo">
+              <fieldset class="seg"><legend>Route the order to</legend>
+                <label><input type="radio" name="venue" value="binance" checked><span>Binance</span></label>
+                <label><input type="radio" name="venue" value="deribit"><span>Deribit</span></label>
+                <label><input type="radio" name="venue" value="hyperliquid"><span>Hyperliquid</span></label>
+              </fieldset>
+              <svg class="flow" viewBox="0 0 520 200" aria-hidden="true">
+                <path class="ed" id="r-in" d="M150 100 H 200"/>
+                <path class="ed" id="r-binance" d="M310 100 C 340 100, 340 34, 372 34"/>
+                <path class="ed" id="r-deribit" d="M310 100 H 372"/>
+                <path class="ed" id="r-hyperliquid" d="M310 100 C 340 100, 340 166, 372 166"/>
+                <g class="nd"><rect x="8" y="68" width="142" height="64" rx="12"/><text x="79" y="96">One order</text><text class="sub" x="79" y="113">buy · BTC perp · limit</text></g>
+                <g class="nd on"><rect x="200" y="72" width="110" height="56" rx="12"/><text x="255" y="98">GoTrade</text><text class="sub" x="255" y="114">adapter per venue</text></g>
+                <g class="nd" id="v-binance"><rect x="372" y="10" width="140" height="48" rx="12"/><text x="442" y="39">Binance</text></g>
+                <g class="nd" id="v-deribit"><rect x="372" y="76" width="140" height="48" rx="12"/><text x="442" y="105">Deribit</text></g>
+                <g class="nd" id="v-hyperliquid"><rect x="372" y="142" width="140" height="48" rx="12"/><text x="442" y="171">Hyperliquid</text></g>
+                <circle class="pkt" r="5" cx="0" cy="0"/>
+              </svg>
+              <dl class="vt" id="venue-info" aria-live="polite"></dl>
+            </div>
+          </div>
+        </article>
+
+        <article class="tile left rise">
+          <span class="kicker">GoRisk</span>
+          <h3>Risk you can see before it bites.</h3>
+          <p>I built the <b>GoRisk</b> page from scratch: 10+ risk-management features and 5+ key risk parameters across 3 asset classes. The panel below is a toy version of the idea.</p>
+          <div class="pic">
+            <div class="desk risk" id="risk" role="group" aria-label="Illustrative risk panel">
+              <label class="rng"><span>Position size <output id="r-size-o">0.50 BTC</output></span><input type="range" id="r-size" min="0.1" max="5" step="0.1" value="0.5"></label>
+              <label class="rng"><span>Leverage <output id="r-lev-o">10×</output></span><input type="range" id="r-lev" min="1" max="50" step="1" value="10"></label>
+              <label class="rng"><span>Price move <output id="r-move-o">−3.0%</output></span><input type="range" id="r-move" min="-20" max="20" step="0.5" value="-3"></label>
+              <div class="rout">
+                <div class="metric"><small>Notional</small><b id="r-not">$30k</b></div>
+                <div class="metric"><small>Margin</small><b id="r-mar">$3k</b></div>
+                <div class="metric" id="r-pnl-m"><small>P&amp;L</small><b id="r-pnl">−$900</b></div>
+              </div>
+              <div class="gauge"><span>Distance to liquidation <b id="r-dist">6.5%</b></span><div class="g"><i id="r-needle"></i></div></div>
+              <span class="state" id="r-state" data-s="ok" aria-live="polite">Healthy</span>
+            </div>
+          </div>
+        </article>
+      </div>
+      <div class="minis">
+        <div class="mini left rise"><strong>8+</strong><p>exchange-specific client features, shipped with the Head of Engineering as product and trading goals moved.</p></div>
+        <div class="mini left rise"><strong>50+</strong><p>active users trading across three exchanges through GoTrade.</p></div>
+        <div class="mini left rise"><strong>3</strong><p>asset classes covered by GoRisk's risk features and parameters.</p></div>
+      </div>
+      <p class="illus">Demos in this section are illustrative. The prices, parameters and routing details are made up to show the idea, not GoQuant's data or code. The percentages and timings are the real results.</p>
+    </div>
+  </section>
+
+  <!-- ============ PROJECTS ============ -->
+  <section id="projects" class="alt center">
+    <div class="wide">
+      <p class="chap reveal"><span>03</span>Projects</p>
+      <h2 class="reveal">Things I built because I wanted them to exist.</h2>
+      <div class="tiles">
+        <article class="tile full rise" id="relay">
+          <div class="left">
+            <span class="kicker">Relay (Agent Desk) · open source, MIT</span>
+            <h3>A desk for a whole team of coding agents.</h3>
+            <p>A Mac app that runs up to <b>16 coding agents</b> (Claude Code, Codex, Gemini CLI, Cursor Agent or a plain shell) side by side as real terminals. A lead agent plans tasks on a board and starts each worker in its own <b>git worktree</b>; you review every diff before it merges.</p>
+            <p>The local server listens only on 127.0.0.1, each agent gets its own scoped token, and agent-to-agent messages are rate-limited. The README also says plainly what it doesn't protect against: an agent with shell access runs as you.</p>
+            <ul class="facts"><li>Electron</li><li>Node.js</li><li>node-pty</li><li>xterm.js</li><li>Monaco</li><li>WebSocket</li><li>MCP, <b>18 tools</b></li><li>~11K lines</li></ul>
+            <div class="links"><a class="more" href="https://aahannp.github.io/relay/">Visit the site</a><a class="more" href="https://github.com/aahannp/relay">Source on GitHub</a></div>
+          </div>
+          <div class="desk relay-grid" id="agents" role="group" aria-label="Relay agent grid mock">
+            <div class="bar"><span>acme-shop · Relay</span><span class="tag">mock</span></div>
+            <div class="agrid" id="agrid"></div>
+            <div class="agctl">
+              <label class="rng"><span>Agents on the desk <output id="ag-o">8</output></span><input type="range" id="ag-n" min="1" max="16" step="1" value="8"></label>
+              <span class="cnt" id="ag-cnt"></span>
+              <button type="button" class="dbtn" id="ag-pause" aria-pressed="false">Pause</button>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div class="proof left rise" id="built-with-relay">
+        <div>
+          <span class="kicker">Built with Relay</span>
+          <p class="count" aria-label="30 or more"><b id="proof-n">30</b><span>+</span></p>
+          <h3>Commits on the S2S platform carry a <code>Generated via Relay</code> trailer.</h3>
+          <p>I used Relay to build the S2S work above. Relay-assisted commits are marked with a trailer, and a search of my local checkouts finds 30+ of them across five-plus repos, all from 26 to 28 Oct 2026.</p>
+          <p class="fine">Earlier S2S work predates the trailer and isn't marked, so 30+ is a floor, not a claim about the whole platform. Repo names are generalised; hashes and PR numbers are left out.</p>
+          <!-- TODO(aahan): "Other apps built with Relay" is NOT verified yet. Add a line here only once you can link to them. -->
+          <!-- TODO(aahan): no cost-savings figure yet. Relay's Spend tab measures cost, but there's no baseline to compare against. Add a number only with a real before/after. -->
+        </div>
+        <div class="desk">
+          <div class="bar"><span>git log --grep "Generated via Relay"</span><span class="tag">5 of 30+</span></div>
+          <ol class="commits" aria-label="Sample commits with the Relay trailer">
+            <li class="cm"><header><span class="repo">policy repo</span><time datetime="2026-10-28">28 Oct 2026</time></header><b>Revert the staging kill switch after the shadow-mode test</b><code>Generated via Relay</code></li>
+            <li class="cm"><header><span class="repo">config service</span><time datetime="2026-10-27">27 Oct 2026</time></header><b>Add receiver test routes for the staging end-to-end run</b><code>Generated via Relay</code></li>
+            <li class="cm"><header><span class="repo">auth service</span><time datetime="2026-10-26">26 Oct 2026</time></header><b>Gate the health check on the S2S receiver being ready</b><code>Generated via Relay</code></li>
+            <li class="cm"><header><span class="repo">identity service</span><time datetime="2026-10-26">26 Oct 2026</time></header><b>Serve signed policy bundles to receivers</b><code>Generated via Relay</code></li>
+            <li class="cm"><header><span class="repo">shared library</span><time datetime="2026-10-26">26 Oct 2026</time></header><b>Receivers fetch the policy bundle and keep the last good one</b><code>Generated via Relay</code></li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="tiles" style="margin-top:20px">
+        <article class="tile full rise" id="swifttrade">
+          <div class="left">
+            <span class="kicker">SwiftTrade · C++</span>
+            <h3>One market feed in, many subscribers out.</h3>
+            <p>A C++ client for the <b>Deribit</b> exchange: REST for trading calls, WebSocket for live market data, and a <b>local WebSocket server</b> that rebroadcasts instrument updates to every client subscribed to that instrument.</p>
+            <p>I benchmarked the API calls and tuned the WebSocket handling and threading to cut order-execution latency.</p>
+            <ul class="facts"><li>C++</li><li>Multithreading</li><li>REST</li><li>WebSocket</li><li>Pub/sub</li></ul>
+            <!-- TODO(aahan): confirm the SwiftTrade link. The brief suggested github.com/aahannp/SwiftTrade (404 on 28 Oct 2026); the resume's Aahan22001IIITD link redirects here. -->
+            <div class="links"><a class="more" href="https://github.com/aahannp/SwiftTrade">Source on GitHub</a></div>
+          </div>
+          <div class="desk fan" id="fan" role="group" aria-label="Pub/sub fan-out demo">
+            <div class="bar"><span>Live demo · broadcast fan-out</span><span class="tag">illustrative</span></div>
+            <svg id="fan-svg" viewBox="0 0 560 270"></svg>
+            <div class="fanctl">
+              <label class="rng"><span>Subscribers <output id="fan-o">5</output></span><input type="range" id="fan-n" min="1" max="8" step="1" value="5"></label>
+              <span class="cnt">ticks in <b id="fan-in">0</b> · messages out <b id="fan-out">0</b></span>
+              <button type="button" class="dbtn" id="fan-pause" aria-pressed="false">Pause</button>
+            </div>
+            <p class="fine" style="margin:0;padding:0 14px 12px;font-size:12px">Click a subscriber (or focus it and press Enter) to switch it between BTC and ETH. Each one only gets its instrument.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PRINCIPLES ============ -->
+  <section id="principles" class="principles" aria-labelledby="principles-title">
+    <div class="hz">
+      <div class="hz-pin">
+        <div class="wide hz-head">
+          <div class="intro">
+            <p class="chap"><span>04</span>How I think</p>
+            <h2 id="principles-title" class="left" style="margin-left:0">Six rules I keep relearning.</h2>
+            <p class="hz-hint">Keep scrolling →</p>
+          </div>
+        </div>
+        <ol class="ptrack" id="ptrack">
+          <li class="pc"><span class="n">01</span><h3>Fail closed.</h3><p>If you can't verify who's calling or what they're allowed to do, the answer is no. An auth layer that fails open is decoration.</p><div class="where"><b>Where</b>S2S receivers reject a bad signature or a revoked key in every mode, fall back to the last good signed policy, never to "allow", and a service doesn't report healthy until its receiver is ready.</div></li>
+          <li class="pc"><span class="n">02</span><h3>Shadow before enforce.</h3><p>Log what you would have denied before you deny it. The first real traffic always knows something your design doc doesn't.</p><div class="where"><b>Where</b>S2S receivers ship in shadow mode and move to enforce once the "would deny" logs are clean.</div></li>
+          <li class="pc"><span class="n">03</span><h3>Bound every queue.</h3><p>An unbounded queue is a slow outage. Say no early, and never spend CPU on a caller who has already left.</p><div class="where"><b>Where</b>The password-verification pool: fixed workers, fixed queue, a fast 429, and dead work skipped.</div></li>
+          <li class="pc"><span class="n">04</span><h3>Always ship the off switch.</h3><p>Anything that can block traffic needs a way to stop blocking it without a deploy, and that switch should be boring to use.</p><div class="where"><b>Where</b>The S2S kill switch drops receivers back to shadow from config. In Relay, agent-to-agent messaging can be turned off in Settings.</div></li>
+          <li class="pc"><span class="n">05</span><h3>Audit what matters, off the hot path.</h3><p>If you can't answer "who did this, and when?" after an incident, you don't have security, you have hope.</p><div class="where"><b>Where</b>The identity service's audit pipeline: every token mint and key compromise, written async, expired by TTL.</div></li>
+          <li class="pc"><span class="n">06</span><h3>Boring tech, honest limits.</h3><p>Use the feature the platform already has, and write down what your design doesn't cover.</p><div class="where"><b>Where</b>Bounded queues and fail-fast limits instead of unbounded buffers. Relay's README names the risk it can't fix. This site: no framework, no build step.</div></li>
+        </ol>
+        <div class="wide" style="width:100%"><div class="hz-bar" aria-hidden="true"><i id="hz-bar"></i></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SKILLS + EDUCATION ============ -->
+  <section id="skills" class="alt center" aria-labelledby="skills-title">
+    <div class="wide">
+      <p class="chap reveal"><span>05</span>Skills and education</p>
+      <h2 id="skills-title" class="reveal">Grouped by where I've used them.</h2>
+      <div class="skills">
+        <div class="sk rise"><h3>Backend and security</h3><small>Meesho: identity, auth, S2S</small><ul><li>Go</li><li>JWT / CWT, JWKS</li><li>OAuth-style token exchange</li><li>KMS</li><li>Worker pools</li><li>Audit logging</li><li>REST / gRPC</li></ul></div>
+        <div class="sk rise"><h3>Infrastructure</h3><small>Meesho: rollout and operations</small><ul><li>Kubernetes</li><li>Helm</li><li>ArgoCD</li><li>Docker</li><li>CI/CD</li><li>Prometheus / Grafana</li></ul></div>
+        <div class="sk rise"><h3>Data stores and messaging</h3><small>Across work and projects</small><ul><li>MySQL</li><li>MongoDB</li><li>Kafka</li><li>Redis</li></ul></div>
+        <div class="sk rise"><h3>Systems and trading</h3><small>GoQuant, SwiftTrade</small><ul><li>C++</li><li>Python</li><li>Multithreading</li><li>TCP / UDP, sockets</li><li>WebSocket</li><li>Linux</li></ul></div>
+        <div class="sk rise"><h3>Apps and tooling</h3><small>Relay</small><ul><li>JavaScript / Node.js</li><li>Electron</li><li>Swift</li><li>MCP</li></ul></div>
+        <div class="sk rise"><h3>Data and ML</h3><small>Coursework and GoOracle</small><ul><li>NumPy</li><li>Pandas</li><li>SciPy</li><li>scikit-learn</li><li>TensorFlow</li><li>Java <i>(also)</i></li></ul></div>
+      </div>
+      <div class="edu">
+        <article class="rise"><time>2022 – 2026</time><h3>IIIT Delhi</h3><p>B.Tech in Computer Science and Applied Mathematics</p></article>
+        <article class="rise"><time>2022 – present</time><h3>IIT Madras</h3><p>BS in Data Science and Programming</p></article>
+      </div>
+      <p class="also reveal"><b>Also:</b> LeetCode Knight, 700+ problems solved, contest rating 1850+. Student mentor at IIIT Delhi, 2024–25.</p>
+    </div>
+  </section>
+
+  <section id="contact" class="final" aria-labelledby="contact-title">
+    <div class="wrap">
+      <h2 id="contact-title" class="reveal">Let's build something that fails safely.</h2>
+      <p class="lede reveal">Backend, identity and auth, distributed systems: I'm happy to talk about any of it, or about anything on this page.</p>
+      <div class="ctas reveal">
+        <a class="pill" href="mailto:aahanpiplani@gmail.com">aahanpiplani@gmail.com</a>
+        <button type="button" class="ghost copy-email" id="copy-email" data-email="aahanpiplani@gmail.com">Copy email</button>
+      </div>
+      <ul class="social reveal" aria-label="Elsewhere">
+        <li><a href="https://www.linkedin.com/in/aahan-piplani-12a19b210/">LinkedIn</a></li>
+        <li><a href="https://github.com/aahannp">GitHub</a></li>
+        <li><a href="https://github.com/aahannp/relay">Relay on GitHub</a></li>
+      </ul>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p class="top">Hand-built: one HTML file, one stylesheet, one script. No framework, no build step, no trackers. Demo data is illustrative; company work is described at resume level and generic names stand in for internal ones.</p>
+    <div class="row">
+      <span>© 2026 Aahan Piplani</span>
+      <nav aria-label="Footer">
+        <a href="https://github.com/aahannp">GitHub</a>
+        <a href="https://www.linkedin.com/in/aahan-piplani-12a19b210/">LinkedIn</a>
+        <a href="mailto:aahanpiplani@gmail.com">Email</a>
+        <a href="#top">Back to top</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
