@@ -525,18 +525,18 @@
     let a = 'bcrypt';
     const wait = () => sleep(calm ? 250 : 650);
     const busy = b => btns.forEach(x => { x.disabled = b; });
-    const clear = () => steps.forEach(s => s.classList.remove('on', 'no', 'skip'));
+    const clear = () => steps.forEach(s => s.classList.remove('on', 'no', 'idle'));
     async function login(right) {
       busy(true); clear();
       steps[0].classList.add('on'); msg.textContent = `Verifying against the stored ${a} hash…`; await wait();
       if (!right) {
-        steps[0].classList.replace('on', 'no'); steps.slice(1).forEach(s => s.classList.add('skip'));
+        steps[0].classList.replace('on', 'no'); steps.slice(1).forEach(s => s.classList.add('idle'));
         msg.textContent = 'Wrong password: 401. A failed login never touches the stored hash, and there is no plaintext to migrate with.';
         return busy(false);
       }
       steps[1].classList.add('on'); msg.textContent = 'Correct. The user gets their 200 now; nothing after this adds to their wait.'; await wait();
       if (a === 'argon2id') {
-        steps[2].classList.add('skip'); steps[3].classList.add('skip');
+        steps[2].classList.add('idle'); steps[3].classList.add('idle');
         msg.textContent = 'Already Argon2id, so there is nothing to migrate. This is the path every login takes from now on.';
         return busy(false);
       }

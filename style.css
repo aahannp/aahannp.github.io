@@ -365,7 +365,7 @@ input[type="range"]:focus-visible::-moz-range-thumb { outline: 2px solid var(--t
 .msteps li.on { border-color: var(--t-accent); color: var(--t-text); background: color-mix(in srgb, var(--t-accent) 8%, transparent); }
 .msteps li.off.on { border-color: var(--t-violet); background: color-mix(in srgb, var(--t-violet) 8%, transparent); }
 .msteps li.no { border-color: var(--t-red); color: var(--t-text); background: color-mix(in srgb, var(--t-red) 8%, transparent); }
-.msteps li.skip { opacity: .4; }
+.msteps li.idle { opacity: .4; }
 .macts { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
 .msay { min-height: 4.5em; margin: 12px 0 0; color: var(--t-dim); font-size: 12.5px; }
 
